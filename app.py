@@ -153,21 +153,21 @@ if archivo is not None:
 
     if anio != "TODOS":
 
-    anio = int(anio)
+        anio = int(anio)
 
-    df_filtrado = df_filtrado[
+        df_filtrado = df_filtrado[
 
-        (
-            df_filtrado["Inicio"].dt.year == anio
-        )
+            (
+                df_filtrado["Inicio"].dt.year == anio
+            )
 
-        |
+            |
 
-        (
-            df_filtrado["Término"].dt.year == anio
-        )
+            (
+                df_filtrado["Término"].dt.year == anio
+            )
 
-    ]
+        ]
 
     if campo != "TODOS":
 
