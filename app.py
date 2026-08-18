@@ -280,18 +280,6 @@ if archivo is not None:
         "OTROS":"#C9C9C9"
     }
 
-# ------------------------------
-# TEMPORAL
-# ------------------------------
-    
-    st.write(df_filtrado.columns.tolist())
-
-    st.write("Categoría" in df_filtrado.columns)
-
-    st.write("Etiqueta" in df_filtrado.columns)
-
-    st.write(colores)
-
   
 # ------------------------------
 # GRAFICO
