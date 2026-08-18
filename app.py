@@ -123,10 +123,14 @@ if archivo is not None:
     # ------------------------------
 
     st.subheader(
-        "Vista previa"
+    "Vista previa"
     )
 
-st.dataframe(
-    df.fillna("").head(100),
-    use_container_width=True
-)
+    st.dataframe(
+        df.fillna("").head(100),
+        use_container_width=True
+    )
+
+    st.success(
+        "Archivo procesado correctamente"
+    )
