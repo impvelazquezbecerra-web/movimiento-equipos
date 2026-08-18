@@ -82,40 +82,98 @@ if archivo is not None:
         dayfirst=True
     )
 
-    # ------------------------------
-    # FILTRO BASE
-    # ------------------------------
+    # =====================================
+    # FILTROS
+    # =====================================
 
-    df = df[
-        (df["Término"] >= FECHA_INICIO)
-        &
-        (df["Inicio"] <= FECHA_FIN)
-    ].copy()
+    st.sidebar.header("Filtros")
 
-    # ------------------------------
-    # INDICADORES
-    # ------------------------------
+    campo = st.sidebar.selectbox(
+
+        "Campo",
+
+        ["TODOS"] +
+
+        sorted(
+            df["Campo"]
+            .dropna()
+            .unique()
+            .tolist()
+        )
+    )
+
+    equipo = st.sidebar.selectbox(
+
+        "Equipo",
+
+        ["TODOS"] +
+
+        sorted(
+            df["Equipo"]
+            .dropna()
+            .unique()
+            .tolist()
+        )
+    )
+
+    pozo = st.sidebar.selectbox(
+
+        "Pozo",
+
+        ["TODOS"] +
+
+        sorted(
+            df["Pozo"]
+            .dropna()
+            .unique()
+            .tolist()
+        )
+    )
+
+    df_filtrado = df.copy()
+
+    if campo != "TODOS":
+
+        df_filtrado = df_filtrado[
+            df_filtrado["Campo"] == campo
+        ]
+
+    if equipo != "TODOS":
+
+        df_filtrado = df_filtrado[
+            df_filtrado["Equipo"] == equipo
+        ]
+
+    if pozo != "TODOS":
+
+        df_filtrado = df_filtrado[
+            df_filtrado["Pozo"] == pozo
+        ]
+
+    # =====================================
+    # DASHBOARD
+    # =====================================
 
     c1, c2, c3, c4 = st.columns(4)
 
     c1.metric(
         "Equipos",
-        df["Equipo"].nunique()
+        df_filtrado["Equipo"].nunique()
     )
 
     c2.metric(
         "Pozos",
-        df["Pozo"].nunique()
+        df_filtrado["Pozo"].nunique()
     )
 
     c3.metric(
         "Intervenciones",
-        len(df)
+        len(df_filtrado)
     )
 
     c4.metric(
         "Campos",
-        df["Campo"].nunique()
+        df_filtrado["Campo"].nunique()
     )
 
     # ------------------------------
@@ -123,9 +181,10 @@ if archivo is not None:
     # ------------------------------
 
     st.subheader(
-    "Archivo procesado correctamente"
+        "Vista previa filtrada"
     )
 
     st.write(
-        f"Registros cargados: {len(df)}"
+        f"Registros encontrados: {len(df_filtrado)}"
     )
+
