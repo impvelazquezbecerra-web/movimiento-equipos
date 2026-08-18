@@ -92,6 +92,21 @@ if archivo is not None:
 
     st.sidebar.header("Filtros")
 
+    anio = st.sidebar.selectbox(
+
+        "Año",
+
+        ["TODOS"] +
+
+        sorted(
+            df["Inicio"]
+            .dt.year
+            .dropna()
+            .unique()
+            .tolist()
+        )
+    )
+    
     campo = st.sidebar.selectbox(
 
         "Campo",
@@ -135,6 +150,24 @@ if archivo is not None:
     )
 
     df_filtrado = df.copy()
+
+    if anio != "TODOS":
+
+    anio = int(anio)
+
+    df_filtrado = df_filtrado[
+
+        (
+            df_filtrado["Inicio"].dt.year == anio
+        )
+
+        |
+
+        (
+            df_filtrado["Término"].dt.year == anio
+        )
+
+    ]
 
     if campo != "TODOS":
 
@@ -336,10 +369,30 @@ if archivo is not None:
 
     )
 
+    if anio == "TODOS":
+
+        fig.update_xaxes(
+
+            range=[
+                FECHA_INICIO,
+                FECHA_FIN
+            ]
+
+        )
+
+    else:
+
+        fig.update_xaxes(
+
+            range=[
+                f"{anio}-01-01",
+                f"{anio}-12-31"
+            ]
+
+        )
+
     fig.update_layout(
-
-        height=1500
-
+        height=1200
     )
 
     st.plotly_chart(
