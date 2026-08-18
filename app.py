@@ -184,10 +184,10 @@ if archivo is not None:
         "Vista previa filtrada"
     )
 
-     st.write(
-            f"Registros encontrados: {len(df_filtrado)}"
+    st.write(
+        f"Registros encontrados: {len(df_filtrado)}"
     )
-        def categoria(x):
+    def categoria(x):
 
         x = str(x).upper()
 
