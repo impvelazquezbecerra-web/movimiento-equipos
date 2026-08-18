@@ -9,7 +9,7 @@ FECHA_INICIO = "2026-01-01"
 FECHA_FIN = "2030-12-31"
 
 st.set_page_config(
-    page_title="Movimiento de Equipos V6",
+    page_title="Movimiento de Equipos",
     layout="wide"
 )
 
@@ -17,7 +17,7 @@ st.set_page_config(
 # TITULO
 # ==========================================
 
-st.title("Movimiento de Equipos")
+st.title("Movimiento de Equipos V6")
 
 # ==========================================
 # CARGA DE ARCHIVO
