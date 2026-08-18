@@ -126,11 +126,6 @@ if archivo is not None:
     "Vista previa"
     )
 
-    st.dataframe(
-        df.fillna("").head(100),
-        use_container_width=True
-    )
-
-    st.success(
-        "Archivo procesado correctamente"
+    st.write(
+        df.head(20)
     )
