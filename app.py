@@ -182,9 +182,148 @@ if archivo is not None:
 
     st.subheader(
         "Vista previa filtrada"
+        )
+
+     st.write(
+            f"Registros encontrados: {len(df_filtrado)}"
+        )
+        def categoria(x):
+
+        x = str(x).upper()
+
+        if "MOV" in x:
+            return "MOVIMIENTO"
+
+        elif "PRE" in x:
+            return "PREARRANQUE"
+
+        elif "ACOPIO" in x:
+            return "ACOPIO"
+
+        elif "DESP" in x:
+            return "DESPLAZAMIENTO"
+
+        elif "INSP" in x:
+            return "INSPECCIÓN"
+
+        elif "MANT" in x:
+            return "MTTO"
+
+        elif "REPARACIÓN MENOR" in x or "RME" in x:
+            return "RME"
+
+        elif "REPARACIÓN MAYOR" in x or "RMA" in x:
+            return "RMA"
+
+        elif "PERF" in x:
+            return "PERFORACIÓN"
+
+        elif "TERM" in x:
+            return "TERMINACIÓN"
+
+        elif "FLEX" in x:
+            return "FLEX"
+
+        else:
+            return "OTROS"
+
+
+    df_filtrado["Categoría"] = (
+        df_filtrado["Intervención"]
+        .apply(categoria)
     )
 
-    st.write(
-        f"Registros encontrados: {len(df_filtrado)}"
+    # ------------------------------
+    # ETIQUETAS
+    # ------------------------------
+
+    df_filtrado = df_filtrado.sort_values(
+        ["Equipo", "Inicio"]
     )
 
+    df_filtrado["Etiqueta"] = (
+        df_filtrado["Pozo"]
+    )
+
+    # ------------------------------
+    # ETIQUETAS
+    # ------------------------------
+
+    colores = {
+
+        "RME":"#92D050",
+
+        "RMA":"#4472C4",
+
+        "PERFORACIÓN":"#006100",
+
+        "TERMINACIÓN":"#FFD966",
+
+        "MOVIMIENTO":"#5B9BD5",
+
+        "MTTO":"#8B5A2B",
+
+        "INSPECCIÓN":"#ED7D31",
+
+        "DESPLAZAMIENTO":"#BFBFBF",
+
+        "ACOPIO":"#FFF2CC",
+
+        "PREARRANQUE":"#D9D9D9",
+
+        "FLEX":"#FFFFFF",
+
+        "OTROS":"#C9C9C9"
+    }
+
+    # ------------------------------
+    # GRAFICO
+    # ------------------------------
+
+    fig = px.timeline(
+
+        df_filtrado,
+
+        x_start="Inicio",
+
+        x_end="Término",
+
+        y="Equipo",
+
+        color="Categoría",
+
+        text="Etiqueta",
+
+        hover_name="Pozo",
+
+        hover_data={
+            "Inicio":"|%d/%m/%Y",
+            "Término":"|%d/%m/%Y",
+            "Campo":True,
+            "Intervención":True,
+            "Días":True,
+            "Beneficio":True,
+            "Beneficio Gas":True
+        },
+
+        color_discrete_map=colores
+    )
+
+    fig.update_yaxes(
+        autorange="reversed"
+    )
+
+    fig.update_traces(
+        textfont_size=9,
+        textposition="inside"
+    )
+
+    fig.update_layout(
+        height=900
+    )
+
+    st.plotly_chart(
+        fig,
+        use_container_width=True
+    )
+    
