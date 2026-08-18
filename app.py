@@ -123,9 +123,9 @@ if archivo is not None:
     # ------------------------------
 
     st.subheader(
-    "Vista previa"
+    "Archivo procesado correctamente"
     )
 
     st.write(
-        df.head(20)
+        f"Registros cargados: {len(df)}"
     )
