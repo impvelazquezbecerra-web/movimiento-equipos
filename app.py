@@ -9,7 +9,7 @@ FECHA_INICIO = "2026-01-01"
 FECHA_FIN = "2030-12-31"
 
 st.set_page_config(
-    page_title="Movimiento de Equipos",
+    page_title="Movimiento de Equipos V6",
     layout="wide"
 )
 
@@ -32,18 +32,18 @@ archivo = st.file_uploader(
 # PROCESAMIENTO
 # ==========================================
 
-if archivo:
+if archivo is not None:
 
     df = pd.read_excel(
         archivo,
         engine="openpyxl"
     )
 
-    # =====================================
-    # VALIDACION
-    # =====================================
-
     df.columns = df.columns.str.strip()
+
+    # ------------------------------
+    # VALIDACION
+    # ------------------------------
 
     columnas_requeridas = [
         "Equipo",
@@ -51,10 +51,7 @@ if archivo:
         "Campo",
         "Intervención",
         "Inicio",
-        "Término",
-        "Días",
-        "Beneficio",
-        "Beneficio Gas"
+        "Término"
     ]
 
     faltantes = [
@@ -71,9 +68,9 @@ if archivo:
 
         st.stop()
 
-    # =====================================
+    # ------------------------------
     # FECHAS
-    # =====================================
+    # ------------------------------
 
     df["Inicio"] = pd.to_datetime(
         df["Inicio"],
@@ -85,9 +82,9 @@ if archivo:
         dayfirst=True
     )
 
-    # =====================================
-    # FILTRO DE PERIODO
-    # =====================================
+    # ------------------------------
+    # FILTRO BASE
+    # ------------------------------
 
     df = df[
         (df["Término"] >= FECHA_INICIO)
@@ -95,9 +92,9 @@ if archivo:
         (df["Inicio"] <= FECHA_FIN)
     ].copy()
 
-    # =====================================
+    # ------------------------------
     # INDICADORES
-    # =====================================
+    # ------------------------------
 
     c1, c2, c3, c4 = st.columns(4)
 
@@ -121,19 +118,15 @@ if archivo:
         df["Campo"].nunique()
     )
 
-    # =====================================
+    # ------------------------------
     # TABLA
-    # =====================================
+    # ------------------------------
 
     st.subheader(
-        "Vista previa de información"
+        "Vista previa"
     )
 
     st.dataframe(
-        df.head(50),
+        df,
         use_container_width=True
-    )
-
-    st.success(
-        "Archivo procesado correctamente"
     )
