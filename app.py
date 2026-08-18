@@ -10,7 +10,7 @@ import plotly.express as px
 # ==========================================
 
 FECHA_INICIO = "2026-01-01"
-FECHA_FIN = "2030-12-31"
+FECHA_FIN = "2029-12-31"
 
 st.set_page_config(
     page_title="Movimiento de Equipos V6",
