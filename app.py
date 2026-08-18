@@ -45,9 +45,9 @@ if archivo is not None:
 
     df.columns = df.columns.str.strip()
 
-    # ------------------------------
-    # VALIDACION
-    # ------------------------------
+# ------------------------------
+# VALIDACION
+# ------------------------------
 
     columnas_requeridas = [
         "Equipo",
@@ -72,9 +72,9 @@ if archivo is not None:
 
         st.stop()
 
-    # ------------------------------
-    # FECHAS
-    # ------------------------------
+# ------------------------------
+# FECHAS
+# ------------------------------
 
     df["Inicio"] = pd.to_datetime(
         df["Inicio"],
@@ -86,9 +86,9 @@ if archivo is not None:
         dayfirst=True
     )
 
-    # =====================================
-    # FILTROS
-    # =====================================
+# =====================================
+# FILTROS
+# =====================================
 
     st.sidebar.header("Filtros")
 
@@ -154,9 +154,9 @@ if archivo is not None:
             df_filtrado["Pozo"] == pozo
         ]
 
-    # =====================================
-    # DASHBOARD
-    # =====================================
+# =====================================
+# DASHBOARD
+# =====================================
 
     c1, c2, c3, c4 = st.columns(4)
 
@@ -180,9 +180,9 @@ if archivo is not None:
         df_filtrado["Campo"].nunique()
     )
 
-    # ------------------------------
-    # TABLA
-    # ------------------------------
+# ------------------------------
+# TABLA
+# ------------------------------
 
     st.subheader(
         "Vista previa filtrada"
@@ -237,9 +237,9 @@ if archivo is not None:
         .apply(categoria)
     )
 
-    # ------------------------------
-    # ETIQUETAS
-    # ------------------------------
+# ------------------------------
+# ETIQUETAS
+# ------------------------------
 
     df_filtrado = df_filtrado.sort_values(
         ["Equipo", "Inicio"]
@@ -249,9 +249,9 @@ if archivo is not None:
         df_filtrado["Pozo"]
     )
 
-    # ------------------------------
-    # ETIQUETAS
-    # ------------------------------
+# ------------------------------
+# ETIQUETAS
+# ------------------------------
 
     colores = {
 
@@ -280,9 +280,9 @@ if archivo is not None:
         "OTROS":"#C9C9C9"
     }
 
-    # ------------------------------
-    # TEMPORAL
-    # ------------------------------
+# ------------------------------
+# TEMPORAL
+# ------------------------------
     
     st.write(df_filtrado.columns.tolist())
 
@@ -292,11 +292,10 @@ if archivo is not None:
 
     st.write(colores)
 
-
-    
-    # ------------------------------
-    # GRAFICO
-    # ------------------------------
+  
+# ------------------------------
+# GRAFICO
+# ------------------------------
 
     fig = px.timeline(
 
@@ -328,20 +327,34 @@ if archivo is not None:
     )
 
     fig.update_yaxes(
-        autorange="reversed"
+    autorange="reversed"
     )
 
     fig.update_traces(
-        textfont_size=9,
+        textfont_size=10,
         textposition="inside"
     )
 
+    fig.update_xaxes(
+
+        tickformat="%b-%Y",
+
+        dtick="M1",
+
+        range=[
+            FECHA_INICIO,
+            FECHA_FIN
+        ]
+
+    )
+
     fig.update_layout(
-        height=900
+
+        height=1200
+
     )
 
     st.plotly_chart(
         fig,
         use_container_width=True
     )
-    
