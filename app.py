@@ -350,7 +350,7 @@ if archivo is not None:
 
     fig.update_layout(
 
-        height=1200
+        height=1500
 
     )
 
