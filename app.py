@@ -86,165 +86,165 @@ if archivo is not None:
         dayfirst=True
     )
 
-# =====================================
-# FILTROS
-# =====================================
+    # =====================================
+    # FILTROS
+    # =====================================
 
-st.sidebar.header("Filtros")
+    st.sidebar.header("Filtros")
 
-# -------------------------
-# AÑO
-# -------------------------
+    # -------------------------
+    # AÑO
+    # -------------------------
 
-anio = st.sidebar.selectbox(
+    anio = st.sidebar.selectbox(
 
-    "Año",
+        "Año",
 
-    ["TODOS"]
+        ["TODOS"]
 
-    +
+        +
 
-    sorted(
-        df["Inicio"]
-        .dt.year
+        sorted(
+            df["Inicio"]
+            .dt.year
+            .dropna()
+            .unique()
+            .tolist()
+        )
+    )
+
+    # -------------------------
+    # CAMPO
+    # -------------------------
+
+    campos_disponibles = [
+
+        "TODOS"
+
+    ] + sorted(
+
+        df["Campo"]
         .dropna()
         .unique()
         .tolist()
+
     )
-)
 
-# -------------------------
-# CAMPO
-# -------------------------
+    campo = st.sidebar.selectbox(
+        "Campo",
+        campos_disponibles
+    )
 
-campos_disponibles = [
+    # -------------------------
+    # EQUIPO
+    # -------------------------
 
-    "TODOS"
+    df_equipo = df.copy()
 
-] + sorted(
+    if campo != "TODOS":
 
-    df["Campo"]
-    .dropna()
-    .unique()
-    .tolist()
+        df_equipo = df_equipo[
+            df_equipo["Campo"] == campo
+        ]
 
-)
+    equipos_disponibles = [
 
-campo = st.sidebar.selectbox(
-    "Campo",
-    campos_disponibles
-)
+        "TODOS"
 
-# -------------------------
-# EQUIPO
-# -------------------------
+    ] + sorted(
 
-df_equipo = df.copy()
+        df_equipo["Equipo"]
+        .dropna()
+        .unique()
+        .tolist()
 
-if campo != "TODOS":
+    )
 
-    df_equipo = df_equipo[
-        df_equipo["Campo"] == campo
-    ]
+    equipo = st.sidebar.selectbox(
+        "Equipo",
+        equipos_disponibles
+    )
 
-equipos_disponibles = [
+    # -------------------------
+    # POZO
+    # -------------------------
 
-    "TODOS"
+    df_pozo = df_equipo.copy()
 
-] + sorted(
+    if equipo != "TODOS":
 
-    df_equipo["Equipo"]
-    .dropna()
-    .unique()
-    .tolist()
+        df_pozo = df_pozo[
+            df_pozo["Equipo"] == equipo
+        ]
 
-)
+    pozos_disponibles = [
 
-equipo = st.sidebar.selectbox(
-    "Equipo",
-    equipos_disponibles
-)
+        "TODOS"
 
-# -------------------------
-# POZO
-# -------------------------
+    ] + sorted(
 
-df_pozo = df_equipo.copy()
+        df_pozo["Pozo"]
+        .dropna()
+        .unique()
+        .tolist()
 
-if equipo != "TODOS":
+    )
 
-    df_pozo = df_pozo[
-        df_pozo["Equipo"] == equipo
-    ]
+    pozo = st.sidebar.selectbox(
+        "Pozo",
+        pozos_disponibles
+    )
 
-pozos_disponibles = [
+    # -------------------------
+    # MOSTRAR ETIQUETAS
+    # -------------------------
 
-    "TODOS"
+    mostrar_etiquetas = st.sidebar.toggle(
+        "Mostrar etiquetas",
+        value=True
+    )
 
-] + sorted(
+    # -------------------------
+    # APLICAR FILTROS
+    # -------------------------
 
-    df_pozo["Pozo"]
-    .dropna()
-    .unique()
-    .tolist()
+    df_filtrado = df.copy()
 
-)
+    if anio != "TODOS":
 
-pozo = st.sidebar.selectbox(
-    "Pozo",
-    pozos_disponibles
-)
+        anio_int = int(anio)
 
-# -------------------------
-# MOSTRAR ETIQUETAS
-# -------------------------
+        df_filtrado = df_filtrado[
 
-mostrar_etiquetas = st.sidebar.toggle(
-    "Mostrar etiquetas",
-    value=True
-)
+            (
+                df_filtrado["Inicio"].dt.year == anio_int
+            )
 
-# -------------------------
-# APLICAR FILTROS
-# -------------------------
+            |
 
-df_filtrado = df.copy()
+            (
+                df_filtrado["Término"].dt.year == anio_int
+            )
 
-if anio != "TODOS":
+        ]
 
-    anio_int = int(anio)
+    if campo != "TODOS":
 
-    df_filtrado = df_filtrado[
+        df_filtrado = df_filtrado[
+            df_filtrado["Campo"] == campo
+        ]
 
-        (
-            df_filtrado["Inicio"].dt.year == anio_int
-        )
+    if equipo != "TODOS":
 
-        |
+        df_filtrado = df_filtrado[
+            df_filtrado["Equipo"] == equipo
+        ]
 
-        (
-            df_filtrado["Término"].dt.year == anio_int
-        )
+    if pozo != "TODOS":
 
-    ]
-
-if campo != "TODOS":
-
-    df_filtrado = df_filtrado[
-        df_filtrado["Campo"] == campo
-    ]
-
-if equipo != "TODOS":
-
-    df_filtrado = df_filtrado[
-        df_filtrado["Equipo"] == equipo
-    ]
-
-if pozo != "TODOS":
-
-    df_filtrado = df_filtrado[
-        df_filtrado["Pozo"] == pozo
-    ]
+        df_filtrado = df_filtrado[
+            df_filtrado["Pozo"] == pozo
+        ]
 # =====================================
 # DASHBOARD
 # =====================================
