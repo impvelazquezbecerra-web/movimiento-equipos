@@ -90,103 +90,161 @@ if archivo is not None:
 # FILTROS
 # =====================================
 
-    st.sidebar.header("Filtros")
+st.sidebar.header("Filtros")
 
-    anio = st.sidebar.selectbox(
+# -------------------------
+# AÑO
+# -------------------------
 
-        "Año",
+anio = st.sidebar.selectbox(
 
-        ["TODOS"] +
+    "Año",
 
-        sorted(
-            df["Inicio"]
-            .dt.year
-            .dropna()
-            .unique()
-            .tolist()
-        )
+    ["TODOS"]
+
+    +
+
+    sorted(
+        df["Inicio"]
+        .dt.year
+        .dropna()
+        .unique()
+        .tolist()
     )
-    
-    campo = st.sidebar.selectbox(
+)
 
-        "Campo",
+# -------------------------
+# CAMPO
+# -------------------------
 
-        ["TODOS"] +
+campos_disponibles = [
 
-        sorted(
-            df["Campo"]
-            .dropna()
-            .unique()
-            .tolist()
+    "TODOS"
+
+] + sorted(
+
+    df["Campo"]
+    .dropna()
+    .unique()
+    .tolist()
+
+)
+
+campo = st.sidebar.selectbox(
+    "Campo",
+    campos_disponibles
+)
+
+# -------------------------
+# EQUIPO
+# -------------------------
+
+df_equipo = df.copy()
+
+if campo != "TODOS":
+
+    df_equipo = df_equipo[
+        df_equipo["Campo"] == campo
+    ]
+
+equipos_disponibles = [
+
+    "TODOS"
+
+] + sorted(
+
+    df_equipo["Equipo"]
+    .dropna()
+    .unique()
+    .tolist()
+
+)
+
+equipo = st.sidebar.selectbox(
+    "Equipo",
+    equipos_disponibles
+)
+
+# -------------------------
+# POZO
+# -------------------------
+
+df_pozo = df_equipo.copy()
+
+if equipo != "TODOS":
+
+    df_pozo = df_pozo[
+        df_pozo["Equipo"] == equipo
+    ]
+
+pozos_disponibles = [
+
+    "TODOS"
+
+] + sorted(
+
+    df_pozo["Pozo"]
+    .dropna()
+    .unique()
+    .tolist()
+
+)
+
+pozo = st.sidebar.selectbox(
+    "Pozo",
+    pozos_disponibles
+)
+
+# -------------------------
+# MOSTRAR ETIQUETAS
+# -------------------------
+
+mostrar_etiquetas = st.sidebar.toggle(
+    "Mostrar etiquetas",
+    value=True
+)
+
+# -------------------------
+# APLICAR FILTROS
+# -------------------------
+
+df_filtrado = df.copy()
+
+if anio != "TODOS":
+
+    anio_int = int(anio)
+
+    df_filtrado = df_filtrado[
+
+        (
+            df_filtrado["Inicio"].dt.year == anio_int
         )
-    )
 
-    equipo = st.sidebar.selectbox(
+        |
 
-        "Equipo",
-
-        ["TODOS"] +
-
-        sorted(
-            df["Equipo"]
-            .dropna()
-            .unique()
-            .tolist()
+        (
+            df_filtrado["Término"].dt.year == anio_int
         )
-    )
 
-    pozo = st.sidebar.selectbox(
+    ]
 
-        "Pozo",
+if campo != "TODOS":
 
-        ["TODOS"] +
+    df_filtrado = df_filtrado[
+        df_filtrado["Campo"] == campo
+    ]
 
-        sorted(
-            df["Pozo"]
-            .dropna()
-            .unique()
-            .tolist()
-        )
-    )
+if equipo != "TODOS":
 
-    df_filtrado = df.copy()
+    df_filtrado = df_filtrado[
+        df_filtrado["Equipo"] == equipo
+    ]
 
-    if anio != "TODOS":
+if pozo != "TODOS":
 
-        anio = int(anio)
-
-        df_filtrado = df_filtrado[
-
-            (
-                df_filtrado["Inicio"].dt.year == anio
-            )
-
-            |
-
-            (
-                df_filtrado["Término"].dt.year == anio
-            )
-
-        ]
-
-    if campo != "TODOS":
-
-        df_filtrado = df_filtrado[
-            df_filtrado["Campo"] == campo
-        ]
-
-    if equipo != "TODOS":
-
-        df_filtrado = df_filtrado[
-            df_filtrado["Equipo"] == equipo
-        ]
-
-    if pozo != "TODOS":
-
-        df_filtrado = df_filtrado[
-            df_filtrado["Pozo"] == pozo
-        ]
-
+    df_filtrado = df_filtrado[
+        df_filtrado["Pozo"] == pozo
+    ]
 # =====================================
 # DASHBOARD
 # =====================================
@@ -330,7 +388,11 @@ if archivo is not None:
 
         color="Categoría",
 
-        text="Etiqueta",
+        text=(
+            "Etiqueta"
+            if mostrar_etiquetas
+            else None
+        ),
 
         hover_name="Pozo",
 
